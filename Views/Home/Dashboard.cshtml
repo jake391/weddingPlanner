@@ -22,6 +22,7 @@
             </thead>
             <tbody>
             @{foreach(Wedding wedding in @Model.AllWeddings){
+                bool flag = true;
                     <tr>
                         <th scope="row"><a href="Wedding/@wedding.WeddingId">@wedding.wedderOne & @wedding.wedderTwo</a></th>
                         <td>@wedding.date.ToString("MMM dd yyyy")</td>
@@ -30,21 +31,19 @@
                             <h6><a class="btn btn-secondary" href='Delete/@wedding.WeddingId' role="button">Delete</a></h6>
                             }
                             else {
-                                    @if(@Model.Going.Count == 0){
-                                        <h6><a class="btn btn-secondary" href='Rsvp/@wedding.WeddingId' role="button">RSVP</a></h6>
-                                }  
-                
                                     @foreach(var guest in @wedding.Users){
                                         @if(@guest.UserId == @ViewBag.idd && @guest.WeddingId == @wedding.WeddingId) {
-                                            <h6><a class="btn btn-secondary" href='UnRsvp/@wedding.WeddingId' role="button">Un-RSVP</a></h6>
-                                            
-                                        }
-                                        else if(@guest.WeddingId != @wedding.WeddingId && @guest.UserId == @ViewBag.idd){
-                                            <h6><a class="btn btn-secondary" href='Rsvp/@wedding.WeddingId' role="button">RSVP</a></h6>
-                                            
+                                            flag = false; 
                                         }
                                     }
-                                }
+                                    @if(flag == false){
+                                        <h6><a class="btn btn-secondary" href='UnRsvp/@wedding.WeddingId' role="button">Un-RSVP</a></h6>
+                                    }
+                                        else{
+                                            <h6><a class="btn btn-secondary" href='Rsvp/@wedding.WeddingId' role="button">RSVP</a></h6>  
+                                        }
+                                    }
+                                
                         </td>
                     </tr>
                 }
