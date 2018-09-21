@@ -1,0 +1,62 @@
+@model ViewModel
+<div class="row">
+    <div class="col-md-6">
+        <h2>Welcome to the Wedding Planner</h2>
+    </div>
+    <div class="col-md-4"></div>
+    <div class="col-md-2">
+        <a class="btn btn-outline-secondary" asp-action="logOut" role="button">Log Out</a>
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Wedding</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Guests</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            @{foreach(Wedding wedding in @Model.AllWeddings){
+                    <tr>
+                        <th scope="row"><a href="Wedding/@wedding.WeddingId">@wedding.wedderOne & @wedding.wedderTwo</a></th>
+                        <td>@wedding.date.ToString("MMM dd yyyy")</td>
+                        <td>@wedding.Users.Count()</td>
+                        <td>@if(@ViewBag.idd == @wedding.UserId){
+                            <h6><a class="btn btn-secondary" href='Delete/@wedding.WeddingId' role="button">Delete</a></h6>
+                            }
+                            else {
+                                    @if(@Model.Going.Count == 0){
+                                        <h6><a class="btn btn-secondary" href='Rsvp/@wedding.WeddingId' role="button">RSVP</a></h6>
+                                }  
+                
+                                    @foreach(var guest in @wedding.Users){
+                                        @if(@guest.UserId == @ViewBag.idd && @guest.WeddingId == @wedding.WeddingId) {
+                                            <h6><a class="btn btn-secondary" href='UnRsvp/@wedding.WeddingId' role="button">Un-RSVP</a></h6>
+                                            
+                                        }
+                                        else if(@guest.WeddingId != @wedding.WeddingId && @guest.UserId == @ViewBag.idd){
+                                            <h6><a class="btn btn-secondary" href='Rsvp/@wedding.WeddingId' role="button">RSVP</a></h6>
+                                            
+                                        }
+                                    }
+                                }
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6"></div>
+    <div class="col-md-4"></div>
+    <div class="col-md-2">
+        <a class="btn btn-secondary" href="newWedding" role="button">New Wedding</a>
+    </div>
+</div>
